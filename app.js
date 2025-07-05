@@ -46,3 +46,21 @@ app.set('port', process.env.PORT || 5000);
 const server = app.listen(app.get('port'), () => {
   console.log(`Express server is listening on port ${server.address().port}`);
 });
+
+//authenticate
+const { Sequelize } = require('sequelize');
+
+const sequelize = new Sequelize({
+  dialect: 'sqlite',
+  storage: 'fsjstd-restapi.db',
+  logging: false 
+});
+
+(async () => {
+  try {
+    await sequelize.authenticate();
+    console.log('Connection Successful')
+  } catch (error) {
+    console.error('Error', error)
+  }
+})();
