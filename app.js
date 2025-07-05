@@ -14,15 +14,15 @@ const app = express();
 // setup morgan which gives us http request logging
 app.use(morgan('dev'));
 
-console.log('About to test Sequelize connection...')
-
 // Test database connection
+console.log('About to test Sequelize connection...');
+
 (async () => {
   try {
     await sequelize.authenticate();
-    console.log('Connection Successful')
+    console.log('Connection to the database successful!');
   } catch (error) {
-    console.error('Error', error)
+    console.error('Unable to connect to the database:', error);
   }
 })();
 
