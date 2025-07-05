@@ -47,6 +47,8 @@ const server = app.listen(app.get('port'), () => {
   console.log(`Express server is listening on port ${server.address().port}`);
 });
 
+console.log('About to test Sequelize connection...')
+
 //authenticate
 const { Sequelize } = require('sequelize');
 
