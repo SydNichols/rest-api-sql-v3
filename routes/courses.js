@@ -53,3 +53,27 @@ router.get('/:id', async (req, res) => {
         });
     }
 });
+
+//POST Course - 201 res code
+router.post('/', async (req, res) => {
+    try {
+        const { title, description, estimatedTime, materialsNeeded, userId } = req.body;
+
+        const course = await Course.create({
+            title,
+            description,
+            estimatedTime,
+            materialsNeeded,
+            userId
+        });
+
+        res.location(`/api/courses/${course.id}`);
+        res.status(201).end();
+    } catch (error) {
+        console.error('Error creating course:', error);
+        res.status(500).json({
+            message: 'Internal server error',
+            error: error.message
+        });
+    }
+});
