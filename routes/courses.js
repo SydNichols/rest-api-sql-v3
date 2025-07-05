@@ -26,3 +26,30 @@ router.get('/', async (req, res) => {
         });
     }
 })
+
+//GET course by ID
+
+router.get('/:id', async (req, res) => {
+    try {
+        const course = await Course.findByPk(req.params.id, {
+            include: [
+                {
+                    model: User,
+                    as: 'user'
+                }
+            ]
+        });
+
+        if (course) {
+            res.status(200).json(course);
+        } else {
+            res.status(404).json({ message: 'Course not found' });
+        }
+    } catch (error) {
+        console.error('Error fetching course:', error)
+        res.status(500).json({
+            message: 'Internal server error', 
+            error: error.message
+        });
+    }
+});
