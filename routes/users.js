@@ -30,9 +30,21 @@ router.post('/', async (req, res) => {
         res.location('/');
         res.status(201).end();
     } catch (error) {
-        res.status(500).json({
-            message:'Internal server error'
-        });
+
+        console.error('Error creating user:', error);
+
+        if (error.name === 'SequelizeValidationError') {
+            const errors = error.errors.map(err => message);
+            res.status(400).json({
+                message: 'Validation error',
+                errors: errors
+            });
+        } else {
+            res.status(500).json({
+                message:'Internal server error',
+                error: error.message
+            });
+        }
     }
 });
 

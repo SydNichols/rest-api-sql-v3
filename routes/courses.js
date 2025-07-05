@@ -25,7 +25,7 @@ router.get('/', async (req, res) => {
             error: error.message
         });
     }
-})
+});
 
 //GET course by ID
 
@@ -71,10 +71,19 @@ router.post('/', async (req, res) => {
         res.status(201).end();
     } catch (error) {
         console.error('Error creating course:', error);
-        res.status(500).json({
-            message: 'Internal server error',
-            error: error.message
-        });
+
+        if (error.name === 'SequelizeValidationError') {
+            const errors = error.errors.map(err => err.message);
+            res.status(400).json({
+                message: 'Validation error',
+                errors: errors
+            });
+        } else {
+            res.status(500).json({
+                message: 'Internal server error',
+                error: error.message
+            });
+        }
     }
 });
 
@@ -101,10 +110,19 @@ router.put('/:id', async (req, res) => {
         }
     } catch (error) {
         console.error('Error updating course:', error);
-        res.status(500).json({
-            message: 'Internal server error',
-            error: error.message
-        });
+
+        if (error.name === 'SequelizeValidationError') {
+            const errors = error.errors.map(err => err.message);
+            res.status(400).json({
+                message: 'Validation error',
+                errors: errors
+            });
+        } else {
+            res.status(500).json({
+                message: 'Internal server error',
+                error: error.message
+            });
+        }
     }
 });
 
