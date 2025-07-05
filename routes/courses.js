@@ -77,3 +77,33 @@ router.post('/', async (req, res) => {
         });
     }
 });
+
+//PUT route for courses
+router.put('/:id', async (req, res) => {
+    try {
+        const { title, description, estimatedTime, materialsNeeded, userId } = req.body;
+
+        const course = await Course.findByPk(req.params.id);
+
+        if (course) {
+            await course.update({
+                title,
+                description,
+                estimatedTime,
+                materialsNeeded,
+                userId
+            });
+            res.status(204).end();
+        } else {
+            res.status(404).json({
+                message: 'Course not found'
+            });
+        }
+    } catch (error) {
+        console.error('Error updating course:', error);
+        res.status(500).json({
+            message: 'Internal server error',
+            error: error.message
+        });
+    }
+});
