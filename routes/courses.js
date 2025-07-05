@@ -107,3 +107,26 @@ router.put('/:id', async (req, res) => {
         });
     }
 });
+
+router.delete('/:id', async (req, res) => {
+    try {
+        const course = await Course.findByPk(req.params.id);
+
+        if (course) {
+            await course.destroy();
+            res.status(204).end();
+        } else {
+            res.status(404).json({
+                message: 'Course not found'
+            })
+        }
+    } catch (error) {
+        console.error('Error deleting course:', error);
+        res.status(500).json({
+            message: 'Internal server error',
+            error: error.message
+        });
+    }
+});
+
+module.exports = router;
