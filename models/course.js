@@ -16,6 +16,7 @@ module.exports = (sequelize, DataTypes) => {
       });
     }
   }
+
   Course.init({
     title: {
       type: DataTypes.STRING,
@@ -44,7 +45,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true
     },
     userId: {
-      type: DataTypes.STRING,
+      type: DataTypes.INTEGER,
       allowNull: false,
       references: {
         model: 'Users',
