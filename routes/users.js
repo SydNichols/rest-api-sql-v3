@@ -43,8 +43,13 @@ router.post('/', async (req, res) => {
 
         console.error('Error creating user:', error);
 
-        if (error.name === 'SequelizeValidationError') {
-            const errors = error.errors.map(err => message);
+        if (error.name === 'SequelizeValidationError' || error.name === 'SequelizeUniqueConstraintError') {
+            const errors = error.errors.map(err => {
+                if (err.type === 'unique violation' && err.path === 'emailAddress'){
+                    return 'Email address already exists';
+                }
+                return err.message;
+            });
             res.status(400).json({
                 message: 'Validation error',
                 errors: errors
