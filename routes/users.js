@@ -7,7 +7,7 @@ const authenticateUser = require('../middleware/auth')
 
 const router = express.Router();
 
-//GER endpoint - return the authenticated user
+//GET endpoint - return the authenticated user
 router.get('/', authenticateUser, async (req, res) => {
     try{
         //return user if authenticates

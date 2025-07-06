@@ -10,10 +10,12 @@ const router = express.Router();
 router.get('/', async (req, res) => {
     try {
         const courses = await Course.findAll({
+            attributes: { exclude: ['createdAt', 'updatedAt'] },
             include: [
                 {
                     model: User,
-                    as: 'user'
+                    as: 'user',
+                    attributes: { exclude: ['createdAt', 'updatedAt', 'password'] }
                 }
             ]
         });
@@ -31,10 +33,12 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
     try {
         const course = await Course.findByPk(req.params.id, {
+            attributes: { exclude: ['createdAt', 'updatedAt'] },
             include: [
                 {
                     model: User,
-                    as: 'user'
+                    as: 'user',
+                    attributes: { exclude: ['createdAt', 'updatedAt', 'password'] }
                 }
             ]
         });
@@ -94,6 +98,13 @@ router.put('/:id', authenticateUser, async (req, res) => {
         const course = await Course.findByPk(req.params.id);
 
         if (course) {
+
+            if (course.userId !== req.currentUser.id){
+                return res.status(403).json({
+                    message: 'Access denied'
+                });
+            }
+            
             await course.update({
                 title,
                 description,
