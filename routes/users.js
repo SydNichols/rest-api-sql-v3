@@ -42,9 +42,10 @@ router.post('/', async (req, res) => {
     } catch (error) {
 
         console.error('Error creating user:', error);
-
+        //validation checks
         if (error.name === 'SequelizeValidationError' || error.name === 'SequelizeUniqueConstraintError') {
             const errors = error.errors.map(err => {
+                //unique email validation
                 if (err.type === 'unique violation' && err.path === 'emailAddress'){
                     return 'Email address already exists';
                 }

@@ -148,7 +148,7 @@ router.delete('/:id', authenticateUser, async (req, res) => {
                     message: 'Access denied'
                 });
             }
-
+            
             await course.destroy();
             res.status(204).end();
         } else {
