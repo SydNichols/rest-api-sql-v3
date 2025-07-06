@@ -1,6 +1,7 @@
 'use strict';
 
 const express = require('express');
+const bcrypt = require('bcryptjs');
 const { User } = require('../models');
 
 const router = express.Router();
@@ -20,11 +21,14 @@ router.post('/', async (req, res) => {
     try {
         const { firstName, lastName, emailAddress, password } = req.body;
 
+        //password hashing
+        const hashedPassword = await bcrypt.hash(password, 10);
+
         const user = await User.create({
             firstName,
             lastName,
             emailAddress,
-            password
+            password: hashedPassword
         });
 
         res.location('/');
