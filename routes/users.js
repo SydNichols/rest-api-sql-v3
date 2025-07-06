@@ -3,12 +3,17 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const { User } = require('../models');
+const authenticateUser = require('../middleware/auth')
 
 const router = express.Router();
 
-router.get('/', async (req, res) => {
+//GER endpoint - return the authenticated user
+router.get('/', authenticateUser, async (req, res) => {
     try{
-        const users = await User.findAll();
+        //return user if authenticates
+        const users = await User.findByPk(req.currentUser.id, {
+            attributes: { exclude: ['password', 'createdAt', 'updatedAt']}
+        });
         res.status(200).json(users);
     } catch (error) {
         res.status(500).json({
@@ -17,6 +22,7 @@ router.get('/', async (req, res) => {
     }
 });
 
+//POST endpoint to create a new user
 router.post('/', async (req, res) => {
     try {
         const { firstName, lastName, emailAddress, password } = req.body;

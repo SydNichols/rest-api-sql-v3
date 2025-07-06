@@ -2,11 +2,11 @@
 
 const express = require('express');
 const { Course, User } = require('../models');
+const authenticateUser = require('../middleware/auth')
 
 const router = express.Router();
 
 //GET endpoint - returns all courses for the user
-
 router.get('/', async (req, res) => {
     try {
         const courses = await Course.findAll({
@@ -28,7 +28,6 @@ router.get('/', async (req, res) => {
 });
 
 //GET course by ID
-
 router.get('/:id', async (req, res) => {
     try {
         const course = await Course.findByPk(req.params.id, {
@@ -54,8 +53,8 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-//POST Course - 201 res code
-router.post('/', async (req, res) => {
+//POST endpoint to create a new course
+router.post('/', authenticateUser, async (req, res) => {
     try {
         const { title, description, estimatedTime, materialsNeeded, userId } = req.body;
 
@@ -87,8 +86,8 @@ router.post('/', async (req, res) => {
     }
 });
 
-//PUT route for courses
-router.put('/:id', async (req, res) => {
+//PUT route for editing courses
+router.put('/:id', authenticateUser, async (req, res) => {
     try {
         const { title, description, estimatedTime, materialsNeeded, userId } = req.body;
 
@@ -126,7 +125,8 @@ router.put('/:id', async (req, res) => {
     }
 });
 
-router.delete('/:id', async (req, res) => {
+//DELETE enpoint to delete a course
+router.delete('/:id', authenticateUser, async (req, res) => {
     try {
         const course = await Course.findByPk(req.params.id);
 
