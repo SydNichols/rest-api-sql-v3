@@ -104,7 +104,7 @@ router.put('/:id', authenticateUser, async (req, res) => {
                     message: 'Access denied'
                 });
             }
-            
+
             await course.update({
                 title,
                 description,
@@ -142,6 +142,13 @@ router.delete('/:id', authenticateUser, async (req, res) => {
         const course = await Course.findByPk(req.params.id);
 
         if (course) {
+
+            if (course.userId !== req.currentUser.id) {
+                return res.status(403).json({
+                    message: 'Access denied'
+                });
+            }
+
             await course.destroy();
             res.status(204).end();
         } else {
