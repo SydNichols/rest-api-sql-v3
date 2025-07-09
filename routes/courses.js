@@ -75,7 +75,7 @@ router.post('/', authenticateUser, async (req, res) => {
             description,
             estimatedTime,
             materialsNeeded,
-            userId
+            userId: req.currentUser.id
         });
 
         res.location(`/api/courses/${course.id}`);
@@ -125,8 +125,7 @@ router.put('/:id', authenticateUser, async (req, res) => {
                 title,
                 description,
                 estimatedTime,
-                materialsNeeded,
-                userId
+                materialsNeeded
             });
             res.status(204).end();
         } else {
