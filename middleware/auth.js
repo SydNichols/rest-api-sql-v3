@@ -30,7 +30,7 @@ const authUser = async (req, res, next) => {
                 message = `User not found for email: ${emailAddress}`;
             }
         } else {
-            message: 'Authorization header not found';
+            message = 'Authorization header not found';
         } 
     } catch (error) {
             message = 'Error occured during authentication';
@@ -39,9 +39,9 @@ const authUser = async (req, res, next) => {
 
         if (message) {
             console.warn(message);
-            res.status(401).json({message: 'Access Denied'});
+            return res.status(401).json({message: 'Access Denied'});
         } else {
-            next();
+            return next();
     }
 };
 

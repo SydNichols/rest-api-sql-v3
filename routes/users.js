@@ -26,6 +26,16 @@ router.get('/', authenticateUser, async (req, res) => {
 router.post('/', async (req, res) => {
     try {
         const { firstName, lastName, emailAddress, password } = req.body;
+        const errors = [];
+
+        if (!firstName) errors.push('First name is required');
+        if (!lastName) errors.push('Last name is required');
+        if (!emailAddress) errors.push ('Email address is required');
+        if (!password) errors.push('Password is required');
+
+        if (errors.length > 0) {
+            return res.status(400).json({ errors });
+        }
 
         //password hashing
         const hashedPassword = await bcrypt.hash(password, 10);

@@ -61,7 +61,15 @@ router.get('/:id', async (req, res) => {
 router.post('/', authenticateUser, async (req, res) => {
     try {
         const { title, description, estimatedTime, materialsNeeded, userId } = req.body;
+        const errors = [];
 
+        if (!title) errors.push('Title is required');
+        if (!description) errors.push('Description is required');
+
+        if (errors.length > 0) {
+            return res.status(400).json({ errors });
+        }
+        
         const course = await Course.create({
             title,
             description,
@@ -94,6 +102,14 @@ router.post('/', authenticateUser, async (req, res) => {
 router.put('/:id', authenticateUser, async (req, res) => {
     try {
         const { title, description, estimatedTime, materialsNeeded, userId } = req.body;
+        const errors = [];
+
+        if (!title) errors.push('Title is required');
+        if (!description) errors.push('Description is required');
+
+        if (errors.length > 0) {
+            return res.status(400).json({ errors });
+        } 
 
         const course = await Course.findByPk(req.params.id);
 
@@ -148,7 +164,7 @@ router.delete('/:id', authenticateUser, async (req, res) => {
                     message: 'Access denied'
                 });
             }
-            
+
             await course.destroy();
             res.status(204).end();
         } else {
